@@ -19,7 +19,6 @@ public class UsersController {
 
     private final UserService userService;
 
-    @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
     }
@@ -34,11 +33,11 @@ public class UsersController {
     @GetMapping("/{id}")
     public String showUser(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.getUser(id));
-        return "/show";
+        return "/show_selected_user";
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute User user) {
+    public String newUser(@ModelAttribute("userDto") UserDto userDto) {
         return "new_user";
     }
 
@@ -65,4 +64,5 @@ public class UsersController {
         userService.deleteUser(id);
         return "redirect:/";
     }
+
 }

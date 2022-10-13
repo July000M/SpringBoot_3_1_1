@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,8 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return usersRepository.findAll().stream().
-                map(userMapper::toDTO).toList();
+        return usersRepository.findAll().stream()
+                .map(userMapper::toDTO)
+                .toList();
     }
 
     @Transactional
@@ -37,11 +37,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(int id) {
-        User user = null;
-        Optional<User> optional = usersRepository.findById(id);
-        if (optional.isPresent()) {
-            user = optional.get();
-        }
+        User user = usersRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         return userMapper.toDTO(user);
     }
 
@@ -50,4 +47,5 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int id) {
         usersRepository.deleteById(id);
     }
+
 }
